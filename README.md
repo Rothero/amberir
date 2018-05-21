@@ -1,2 +1,2 @@
-# amberir
+# amberis
 Snake matemático

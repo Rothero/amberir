@@ -28,6 +28,7 @@ class Snake:
         self.rect = pygame.rect.Rect((
             GameSettings.SCREEN_SIZE[0] / 2,
             GameSettings.SCREEN_SIZE[1] / 2, 50, 50))
+        self.alive = True
 
     def handle_keys(self):
         key = pygame.key.get_pressed()
@@ -42,6 +43,9 @@ class Snake:
             self.rect.move_ip(distance, 0)
         elif key[pygame.K_LEFT]:
             self.rect.move_ip(-distance, 0)
+
+    def is_alive(self):
+        return self.alive
 
     def draw(self, screen):
         pygame.draw.rect(screen, GameSettings.WHITE, self.rect)

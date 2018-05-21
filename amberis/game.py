@@ -38,7 +38,7 @@ class Game:
         snake = Snake()
         done = False
         clock = pygame.time.Clock()
-        while not done:
+        while snake.is_alive() or done is False:
             clock.tick(10)
 
             # Closes the window if the user clicked to close.
@@ -51,6 +51,7 @@ class Game:
             snake.handle_keys()
             block = Block()
             block.draw(screen)
+
             pygame.display.update()
 
         pygame.quit()
