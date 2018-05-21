@@ -1,0 +1,2 @@
+# amberir
+Snake matemático
