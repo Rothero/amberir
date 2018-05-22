@@ -26,8 +26,8 @@ class Snake:
     def __init__(self):
         self.length = 1
         self.rect = pygame.rect.Rect((
-            GameSettings.SCREEN_SIZE[0] / 2,
-            GameSettings.SCREEN_SIZE[1] / 2, 50, 50))
+            (GameSettings.SCREEN_SIZE[0] / 2) - 50,
+            (GameSettings.SCREEN_SIZE[1] / 2) - 50, 50, 50))
         self.alive = True
 
     def handle_keys(self):
