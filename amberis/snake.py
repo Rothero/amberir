@@ -45,7 +45,17 @@ class Snake:
             self.rect.move_ip(-distance, 0)
 
     def is_alive(self):
+        """Checks if the snake is still alive. """
         return self.alive
+
+    def on_border(self):
+        """Checks if the snake in on the border. """
+        if (self.rect[0] <= 0 or self.rect[1] <= 0 or
+            self.rect[0] >= GameSettings.SCREEN_SIZE[0] - 50 or
+                self.rect[1] >= GameSettings.SCREEN_SIZE[1] - 50):
+            return True
+
+        return False
 
     def draw(self, screen):
         pygame.draw.rect(screen, GameSettings.WHITE, self.rect)

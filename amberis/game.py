@@ -42,7 +42,7 @@ class Game:
             - (text.get_rect().width / 2),
             (GameSettings.SCREEN_SIZE[1] / 2) - 50))
 
-    def show_menu(self, screen):
+    def show_title(self, screen):
         title_font = pygame.font.SysFont("hack", 100)
         title = title_font.render("Amberis", 1, (255, 255, 255))
         self.centralized_text(title, screen)
@@ -55,7 +55,7 @@ class Game:
         font = pygame.font.SysFont("hack", 50)
 
         while snake.is_alive() or done is False:
-            clock.tick(15)
+            clock.tick(60)
 
             # Closes the window if the user clicked to close.
             for event in pygame.event.get():
@@ -63,10 +63,10 @@ class Game:
                     done = True
 
             screen = self.set_screen()
-            self.show_menu(screen)
             snake.draw(screen)
             snake.handle_keys()
-            if snake.rect[0] <= 0 or snake.rect[1] <= 0:
+
+            if (snake.on_border()):
                 label = font.render("Você morreu", 1, (255, 255, 255))
                 self.centralized_text(label, screen)
                 snake.alive = False
