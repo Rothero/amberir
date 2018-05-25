@@ -64,9 +64,10 @@ class Snake:
 
     def on_border(self):
         """Checks if the snake in on the border. """
-        if (self.rect[0] <= 0 or self.rect[1] <= 0 or
-            self.rect[0] >= GameSettings.SCREEN_SIZE[0] - self.rect[2] or
-                self.rect[1] >= GameSettings.SCREEN_SIZE[1] - self.rect[3]):
+        if (self.rect[0] == -GameSettings.CELL_SIZE or
+            self.rect[1] == -GameSettings.CELL_SIZE or
+            self.rect[0] >= GameSettings.SCREEN_SIZE[0] or
+                self.rect[1] >= GameSettings.SCREEN_SIZE[1]):
             return True
 
         return False

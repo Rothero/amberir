@@ -87,7 +87,6 @@ class Game:
 
             # Closes the window if the user clicked to close.
             for event in pygame.event.get():
-                print(event)
                 if event.type == pygame.QUIT:
                     done = True
 
@@ -98,7 +97,7 @@ class Game:
 
             if (snake.on_border()):
                 label = font.render("Você morreu", 1, (255, 255, 255))
-                self.centralized_text(label, self.screen)
+                self.centralized_text(label)
                 snake.alive = False
                 done = True
 
@@ -110,4 +109,4 @@ class Game:
 
             pygame.display.update()
 
-        # pygame.quit()
+        pygame.quit()
