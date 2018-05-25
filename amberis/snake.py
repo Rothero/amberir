@@ -44,7 +44,9 @@ class Snake:
             self.direction = 'right'
         elif key[pygame.K_LEFT]:
             self.direction = 'left'
-        elif key[pygame.K_ESCAPE]:
+
+        # Quits game.
+        if key[pygame.K_ESCAPE]:
             pygame.quit()
             sys.exit()
 

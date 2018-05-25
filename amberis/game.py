@@ -96,7 +96,7 @@ class Game:
             snake.set_direction()
 
             if (snake.on_border()):
-                label = font.render("Você morreu", 1, (255, 255, 255))
+                label = font.render("Você morreu", 1, GameSettings.BLUE)
                 self.centralized_text(label)
                 snake.alive = False
                 done = True
