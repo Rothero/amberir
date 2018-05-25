@@ -16,6 +16,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 """
 
+import sys
+
 import pygame
 
 from settings import GameSettings
@@ -26,23 +28,35 @@ class Snake:
     def __init__(self):
         self.length = 1
         self.rect = pygame.rect.Rect((
-            (GameSettings.SCREEN_SIZE[0] / 2) - 50,
-            (GameSettings.SCREEN_SIZE[1] / 2) - 50, 50, 50))
+            (GameSettings.SCREEN_SIZE[0] / 2) - 25,
+            (GameSettings.SCREEN_SIZE[1] / 2) - 25, 25, 25))
         self.alive = True
+        self.direction = 'up'
 
     def handle_keys(self):
         key = pygame.key.get_pressed()
-        distance = 15
 
         if key[pygame.K_DOWN]:
-            self.rect.move_ip(0, distance)
+            self.direction = 'down'
         elif key[pygame.K_UP]:
-            self.rect.move_ip(0, -distance)
-
-        if key[pygame.K_RIGHT]:
-            self.rect.move_ip(distance, 0)
+            self.direction = 'up'
+        elif key[pygame.K_RIGHT]:
+            self.direction = 'right'
         elif key[pygame.K_LEFT]:
-            self.rect.move_ip(-distance, 0)
+            self.direction = 'left'
+        elif key[pygame.K_ESCAPE]:
+            pygame.quit()
+            sys.exit()
+
+    def set_direction(self):
+        if self.direction == "down":
+            self.rect.move_ip(0, GameSettings.CELL_SIZE)
+        elif self.direction == "up":
+            self.rect.move_ip(0, -GameSettings.CELL_SIZE)
+        elif self.direction == "right":
+            self.rect.move_ip(GameSettings.CELL_SIZE, 0)
+        elif self.direction == "left":
+            self.rect.move_ip(-GameSettings.CELL_SIZE, 0)
 
     def is_alive(self):
         """Checks if the snake is still alive. """
@@ -51,8 +65,8 @@ class Snake:
     def on_border(self):
         """Checks if the snake in on the border. """
         if (self.rect[0] <= 0 or self.rect[1] <= 0 or
-            self.rect[0] >= GameSettings.SCREEN_SIZE[0] - 50 or
-                self.rect[1] >= GameSettings.SCREEN_SIZE[1] - 50):
+            self.rect[0] >= GameSettings.SCREEN_SIZE[0] - self.rect[2] or
+                self.rect[1] >= GameSettings.SCREEN_SIZE[1] - self.rect[3]):
             return True
 
         return False

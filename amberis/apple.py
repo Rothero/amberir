@@ -22,16 +22,13 @@ import pygame
 from settings import GameSettings
 
 
-class Block:
+class Apple:
 
     def __init__(self):
         self.rect = pygame.rect.Rect((
             random.randint(0, GameSettings.SCREEN_SIZE[0]),
-            random.randint(0, GameSettings.SCREEN_SIZE[1]), 50, 50))
-        self.value = 1
-
-    def exits(self):
-        return True
+            random.randint(0, GameSettings.SCREEN_SIZE[1]), 25, 25))
+        self.value = random.randint(0, 20)
 
     def draw(self, screen):
         pygame.draw.rect(screen, GameSettings.RED, self.rect)

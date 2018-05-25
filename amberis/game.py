@@ -18,34 +18,59 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 import pygame
 
-from block import Block
+from apple import Apple
 from snake import Snake
 from settings import GameSettings
 
 
 class Game:
 
+    def __init__(self):
+        self.score = 0
+        self.screen = pygame.display.set_mode(GameSettings.SCREEN_SIZE)
+
     def set_screen(self):
-        screen = pygame.display.set_mode(GameSettings.SCREEN_SIZE)
         pygame.display.set_caption("Snake matemático")
-        screen.fill(GameSettings.BACKGROUND)
+        self.screen.fill(GameSettings.BACKGROUND)
 
-        pygame.display.flip()
-        return screen
+    def draw_background_chain(self):
+        for line in range(0,
+                          GameSettings.SCREEN_SIZE[0],
+                          GameSettings.CELL_SIZE):
+            pygame.draw.line(
+                self.screen,
+                GameSettings.GREEN, (line, 0),
+                (line, GameSettings.SCREEN_SIZE[1]))
 
-    def centralized_text(self, text, screen):
-        # Centralizes text. Takes the screen width divides by two, then
-        # gets the width of the text and divides by two, after subtract
-        # one by another.
-        screen.blit(text, ((
-            GameSettings.SCREEN_SIZE[0] / 2)
-            - (text.get_rect().width / 2),
+        for column in range(0,
+                            GameSettings.SCREEN_SIZE[1],
+                            GameSettings.CELL_SIZE):
+            pygame.draw.line(
+                self.screen,
+                GameSettings.GREEN, (0, column),
+                (GameSettings.SCREEN_SIZE[0], column))
+
+    def centralized_text(self, text):
+        """
+        Centralizes text. Takes the screen width divides by two, then
+        gets the width of the text and divides by two, after subtract
+        one by another.
+        """
+        text_width = text.get_rect().width
+        self.screen.blit(text, ((
+            GameSettings.SCREEN_SIZE[0] / 2) - (text_width / 2),
             (GameSettings.SCREEN_SIZE[1] / 2) - 50))
 
-    def show_title(self, screen):
+    def show_title(self):
         title_font = pygame.font.SysFont("hack", 100)
-        title = title_font.render("Amberis", 1, (255, 255, 255))
-        self.centralized_text(title, screen)
+        title = title_font.render("Amberis", 1, GameSettings.WHITE)
+        self.centralized_text(title)
+
+    def draw_score(self):
+        score_text = pygame.font.SysFont("hack", 15)
+        score = score_text.render(
+            "Score: " + str(self.score), 1, GameSettings.BLUE)
+        self.screen.blit(score, (50, 50))
 
     def run(self):
         pygame.init()
@@ -53,29 +78,36 @@ class Game:
         done = False
         clock = pygame.time.Clock()
         font = pygame.font.SysFont("hack", 50)
+        apple = Apple()
+        self.set_screen()
+        self.draw_background_chain()
 
-        while snake.is_alive() or done is False:
-            clock.tick(60)
+        while done is False:
+            clock.tick(10)
 
             # Closes the window if the user clicked to close.
             for event in pygame.event.get():
+                print(event)
                 if event.type == pygame.QUIT:
                     done = True
 
-            screen = self.set_screen()
-            snake.draw(screen)
+            self.draw_score()
+            snake.draw(self.screen)
             snake.handle_keys()
+            snake.set_direction()
 
             if (snake.on_border()):
                 label = font.render("Você morreu", 1, (255, 255, 255))
-                self.centralized_text(label, screen)
+                self.centralized_text(label, self.screen)
                 snake.alive = False
                 done = True
-                break
 
-            block = Block()
-            block.draw(screen)
+            apple.draw(self.screen)
+
+            if (apple.rect[0] + snake.rect[0] == snake.rect[0] and
+                    apple.rect[1] + snake.rect[1] == snake.rect[1]):
+                print("asda")
 
             pygame.display.update()
 
-        pygame.quit()
+        # pygame.quit()
