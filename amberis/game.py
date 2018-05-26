@@ -95,16 +95,16 @@ class Game:
             snake.handle_keys()
             snake.set_direction()
 
+            apple.draw(self.screen)
+
             if (snake.on_border()):
                 label = font.render("Você morreu", 1, GameSettings.BLUE)
                 self.centralized_text(label)
                 snake.alive = False
                 done = True
 
-            apple.draw(self.screen)
-
-            if (apple.rect[0] + snake.rect[0] == snake.rect[0] and
-                    apple.rect[1] + snake.rect[1] == snake.rect[1]):
+            if (apple.rect[0] - snake.rect[0] == snake.rect[0] and
+                    apple.rect[1] - snake.rect[1] == snake.rect[1]):
                 print("asda")
 
             pygame.display.update()

@@ -27,9 +27,11 @@ class Snake:
 
     def __init__(self):
         self.length = 1
-        self.rect = pygame.rect.Rect((
-            (GameSettings.SCREEN_SIZE[0] / 2) - 25,
-            (GameSettings.SCREEN_SIZE[1] / 2) - 25, 25, 25))
+        self.x = (GameSettings.SCREEN_SIZE[0] / 2) - GameSettings.CELL_SIZE
+        self.y = (GameSettings.SCREEN_SIZE[1] / 2) - GameSettings.CELL_SIZE
+        self.rect = pygame.rect.Rect((self.x, self.y,
+                                      GameSettings.CELL_SIZE,
+                                      GameSettings.CELL_SIZE))
         self.alive = True
         self.direction = 'up'
 
@@ -52,13 +54,33 @@ class Snake:
 
     def set_direction(self):
         if self.direction == "down":
-            self.rect.move_ip(0, GameSettings.CELL_SIZE)
+            self.x = self.rect[0]
+            self.y = self.rect[1] + GameSettings.CELL_SIZE
+            self.rect = pygame.rect.Rect((self.x, self.y,
+                                          GameSettings.CELL_SIZE,
+                                          GameSettings.CELL_SIZE))
+            # self.rect.move_ip(0, GameSettings.CELL_SIZE)
         elif self.direction == "up":
-            self.rect.move_ip(0, -GameSettings.CELL_SIZE)
+            self.x = self.rect[0]
+            self.y = self.rect[1] - GameSettings.CELL_SIZE
+            self.rect = pygame.rect.Rect((self.x, self.y,
+                                          GameSettings.CELL_SIZE,
+                                          GameSettings.CELL_SIZE))
+            # self.rect.move_ip(0, -GameSettings.CELL_SIZE)
         elif self.direction == "right":
-            self.rect.move_ip(GameSettings.CELL_SIZE, 0)
+            self.x = self.rect[0] + GameSettings.CELL_SIZE
+            self.y = self.rect[1]
+            self.rect = pygame.rect.Rect((self.x, self.y,
+                                          GameSettings.CELL_SIZE,
+                                          GameSettings.CELL_SIZE))
+            # self.rect.move_ip(GameSettings.CELL_SIZE, 0)
         elif self.direction == "left":
-            self.rect.move_ip(-GameSettings.CELL_SIZE, 0)
+            self.x = self.rect[0] - GameSettings.CELL_SIZE
+            self.y = self.rect[1]
+            self.rect = pygame.rect.Rect((self.x, self.y,
+                                          GameSettings.CELL_SIZE,
+                                          GameSettings.CELL_SIZE))
+            # self.rect.move_ip(-GameSettings.CELL_SIZE, 0)
 
     def is_alive(self):
         """Checks if the snake is still alive. """
