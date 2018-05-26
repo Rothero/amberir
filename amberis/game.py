@@ -29,8 +29,10 @@ class Game:
         self.score = 0
         self.screen = pygame.display.set_mode(GameSettings.SCREEN_SIZE)
 
-    def set_screen(self):
+    def set_caption(self):
         pygame.display.set_caption("Snake matemático")
+
+    def set_screen(self):
         self.screen.fill(GameSettings.BACKGROUND)
 
     def draw_background_chain(self):
@@ -79,11 +81,16 @@ class Game:
         clock = pygame.time.Clock()
         font = pygame.font.SysFont("hack", 50)
         apple = Apple()
+        self.set_caption()
         self.set_screen()
         self.draw_background_chain()
 
         while done is False:
             clock.tick(10)
+
+            # self.screen.fill((0, 0, 0))
+            self.set_screen()
+            self.draw_background_chain()
 
             # Closes the window if the user clicked to close.
             for event in pygame.event.get():

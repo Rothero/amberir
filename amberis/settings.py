@@ -25,4 +25,4 @@ class GameSettings:
     BLUE = (0, 0, 255)
 
     SCREEN_SIZE = [1200, 800]
-    CELL_SIZE = 25
+    CELL_SIZE = 40
