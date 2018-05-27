@@ -68,10 +68,10 @@ class Game:
         title = title_font.render("Amberis", 1, GameSettings.WHITE)
         self.centralized_text(title)
 
-    def draw_score(self):
+    def draw_score(self, snake):
         score_text = pygame.font.SysFont("hack", 15)
         score = score_text.render(
-            "Score: " + str(self.score), 1, GameSettings.BLUE)
+            "Score: " + str(snake.length - 2), 1, GameSettings.BLUE)
         self.screen.blit(score, (50, 50))
 
     def run(self):
@@ -97,22 +97,34 @@ class Game:
                 if event.type == pygame.QUIT:
                     done = True
 
-            self.draw_score()
+            self.draw_score(snake)
             snake.draw(self.screen)
             snake.handle_keys()
             snake.set_direction()
 
             apple.draw(self.screen)
 
-            if (snake.on_border()):
+            # Checks if the player ate the apple.
+            if snake.ate_apple(apple):
+                apple = Apple()
+                apple.draw(self.screen)
+                snake.length += 1
+                new_position = {"x": snake.coords[-1]["x"],
+                                "y": snake.coords[-1]["y"]}
+                snake.coords.append(new_position)
+
+            # Checks if the snake hit itself.
+            if snake.hit_itself():
                 label = font.render("Você morreu", 1, GameSettings.BLUE)
                 self.centralized_text(label)
                 snake.alive = False
                 done = True
 
-            if (apple.rect[0] - snake.rect[0] == snake.rect[0] and
-                    apple.rect[1] - snake.rect[1] == snake.rect[1]):
-                print("asda")
+            if (snake.on_border()):
+                label = font.render("Você morreu", 1, GameSettings.BLUE)
+                self.centralized_text(label)
+                snake.alive = False
+                done = True
 
             pygame.display.update()
 

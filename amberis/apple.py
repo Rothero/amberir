@@ -17,6 +17,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 """
 
 import random
+
 import pygame
 
 from settings import GameSettings
@@ -25,13 +26,15 @@ from settings import GameSettings
 class Apple:
 
     def __init__(self):
-        self.rect = pygame.rect.Rect((
-            random.randint(0, GameSettings.SCREEN_SIZE[0]),
-            random.randint(0, GameSettings.SCREEN_SIZE[1]),
-            GameSettings.CELL_SIZE,
-            GameSettings.CELL_SIZE))
+        self.x = random.randint(
+            0, GameSettings.CELL_WIDTH - 1) * GameSettings.CELL_SIZE
+        self.y = random.randint(
+            0, GameSettings.CELL_HEIGHT - 1) * GameSettings.CELL_SIZE
+
+        self.rect = pygame.rect.Rect((self.x, self.y,
+                                      GameSettings.CELL_SIZE,
+                                      GameSettings.CELL_SIZE))
         self.value = random.randint(0, 20)
 
     def draw(self, screen):
         pygame.draw.rect(screen, GameSettings.RED, self.rect)
-        self.rect.clamp_ip(screen.get_rect())

@@ -26,12 +26,19 @@ from settings import GameSettings
 class Snake:
 
     def __init__(self):
-        self.length = 1
-        self.x = (GameSettings.SCREEN_SIZE[0] / 2) - GameSettings.CELL_SIZE
-        self.y = (GameSettings.SCREEN_SIZE[1] / 2) - GameSettings.CELL_SIZE
-        self.rect = pygame.rect.Rect((self.x, self.y,
-                                      GameSettings.CELL_SIZE,
-                                      GameSettings.CELL_SIZE))
+        self.length = 2
+        # Starts in the center of the screen.
+        self.coords = [
+            {
+                "x": (GameSettings.SCREEN_WIDTH / 2) - GameSettings.CELL_SIZE,
+                "y": (GameSettings.SCREEN_HEIGHT / 2) - GameSettings.CELL_SIZE
+            },
+            {
+                "x": (GameSettings.SCREEN_WIDTH / 2) - GameSettings.CELL_SIZE,
+                "y": (GameSettings.SCREEN_HEIGHT
+                      / 2) - GameSettings.CELL_SIZE * 2
+            }
+        ]
         self.alive = True
         self.direction = 'up'
 
@@ -54,33 +61,36 @@ class Snake:
 
     def set_direction(self):
         if self.direction == "down":
-            self.x = self.rect[0]
-            self.y = self.rect[1] + GameSettings.CELL_SIZE
-            self.rect = pygame.rect.Rect((self.x, self.y,
-                                          GameSettings.CELL_SIZE,
-                                          GameSettings.CELL_SIZE))
-            # self.rect.move_ip(0, GameSettings.CELL_SIZE)
+            new_position = {"x": self.coords[0]["x"],
+                            "y": self.coords[0]["y"] + GameSettings.CELL_SIZE}
         elif self.direction == "up":
-            self.x = self.rect[0]
-            self.y = self.rect[1] - GameSettings.CELL_SIZE
-            self.rect = pygame.rect.Rect((self.x, self.y,
-                                          GameSettings.CELL_SIZE,
-                                          GameSettings.CELL_SIZE))
-            # self.rect.move_ip(0, -GameSettings.CELL_SIZE)
+            new_position = {"x": self.coords[0]["x"],
+                            "y": self.coords[0]["y"] - GameSettings.CELL_SIZE}
         elif self.direction == "right":
-            self.x = self.rect[0] + GameSettings.CELL_SIZE
-            self.y = self.rect[1]
-            self.rect = pygame.rect.Rect((self.x, self.y,
-                                          GameSettings.CELL_SIZE,
-                                          GameSettings.CELL_SIZE))
-            # self.rect.move_ip(GameSettings.CELL_SIZE, 0)
+            new_position = {"x": self.coords[0]["x"] + GameSettings.CELL_SIZE,
+                            "y": self.coords[0]["y"]}
         elif self.direction == "left":
-            self.x = self.rect[0] - GameSettings.CELL_SIZE
-            self.y = self.rect[1]
-            self.rect = pygame.rect.Rect((self.x, self.y,
-                                          GameSettings.CELL_SIZE,
-                                          GameSettings.CELL_SIZE))
-            # self.rect.move_ip(-GameSettings.CELL_SIZE, 0)
+            new_position = {"x": self.coords[0]["x"] - GameSettings.CELL_SIZE,
+                            "y": self.coords[0]["y"]}
+
+        self.coords.insert(0, new_position)
+        del self.coords[-1]
+
+    def hit_itself(self):
+        # Checks if the snake hit itself.
+        for coord in self.coords[1:]:
+            if (coord["x"] == self.coords[0]["x"] and
+                    coord["y"] == self.coords[0]["y"]):
+                return True
+
+        return False
+
+    def ate_apple(self, apple):
+        if (self.coords[0]["x"] == apple.rect[0] and
+                self.coords[0]["y"] == apple.rect[1]):
+            return True
+
+        return False
 
     def is_alive(self):
         """Checks if the snake is still alive. """
@@ -88,14 +98,18 @@ class Snake:
 
     def on_border(self):
         """Checks if the snake in on the border. """
-        if (self.rect[0] == -GameSettings.CELL_SIZE or
-            self.rect[1] == -GameSettings.CELL_SIZE or
-            self.rect[0] >= GameSettings.SCREEN_SIZE[0] or
-                self.rect[1] >= GameSettings.SCREEN_SIZE[1]):
+        if (self.coords[0]["x"] == -GameSettings.CELL_SIZE or
+            self.coords[0]["y"] == -GameSettings.CELL_SIZE or
+            self.coords[0]["x"] >= GameSettings.SCREEN_SIZE[0] or
+                self.coords[0]["y"] >= GameSettings.SCREEN_SIZE[1]):
             return True
 
         return False
 
     def draw(self, screen):
-        pygame.draw.rect(screen, GameSettings.WHITE, self.rect)
-        self.rect.clamp_ip(screen.get_rect())
+        for coord in self.coords:
+            rect = pygame.rect.Rect((coord["x"], coord["y"],
+                                     GameSettings.CELL_SIZE,
+                                     GameSettings.CELL_SIZE))
+            pygame.draw.rect(screen, GameSettings.WHITE, rect)
+            rect.clamp_ip(screen.get_rect())
