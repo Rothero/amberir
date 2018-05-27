@@ -111,5 +111,8 @@ class Snake:
             rect = pygame.rect.Rect((coord["x"], coord["y"],
                                      GameSettings.CELL_SIZE,
                                      GameSettings.CELL_SIZE))
+            rect_border = pygame.rect.Rect((coord["x"], coord["y"],
+                                            GameSettings.CELL_SIZE / 2,
+                                            GameSettings.CELL_SIZE / 2))
             pygame.draw.rect(screen, GameSettings.WHITE, rect)
-            rect.clamp_ip(screen.get_rect())
+            pygame.draw.rect(screen, GameSettings.LIGHT_GRAY, rect_border)

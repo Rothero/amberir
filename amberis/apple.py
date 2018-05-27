@@ -38,3 +38,8 @@ class Apple:
 
     def draw(self, screen):
         pygame.draw.rect(screen, GameSettings.RED, self.rect)
+
+        font = pygame.font.SysFont("hack", 42)
+        value = str(self.value)
+        text = font.render(value, 1, GameSettings.BACKGROUND)
+        screen.blit(text, (self.x, self.y))

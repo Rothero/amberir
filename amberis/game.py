@@ -97,10 +97,10 @@ class Game:
                 if event.type == pygame.QUIT:
                     done = True
 
-            self.draw_score(snake)
             snake.draw(self.screen)
             snake.handle_keys()
             snake.set_direction()
+            self.draw_score(snake)
 
             apple.draw(self.screen)
 
