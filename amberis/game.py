@@ -81,6 +81,7 @@ class Game:
         clock = pygame.time.Clock()
         font = pygame.font.SysFont("hack", 50)
         apple = Apple()
+
         self.set_caption()
         self.set_screen()
         self.draw_background_chain()
