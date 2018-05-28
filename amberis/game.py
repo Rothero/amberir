@@ -85,7 +85,8 @@ class Game:
             self.screen.blit(click_text, (50, 50))
 
             if self.get_random_key() is not None:
-                return
+                pygame.event.get()
+                return 0
 
             pygame.display.update()
 
@@ -96,17 +97,17 @@ class Game:
         self.screen.blit(score, (50, 50))
 
     def get_random_key(self):
-        key_event = pygame.event.get(pygame.KEYUP)
+        key_event = pygame.key.get_pressed()
+        print(key_event)
 
-        if len(key_event) == 0:
-            return None
-
-        if key_event[0].key == pygame.K_ESCAPE:
+        if key_event[pygame.K_ESCAPE]:
             pygame.quit()
             sys.exit()
+        for i in key_event:
+            if i != 0:
+                return key_event
 
-        if key_event[0].key == pygame.K_RETURN:
-            return key_event[0].key
+        return None
 
     def game_over_screen(self):
         game_over_font = pygame.font.SysFont("hack", 50)
@@ -118,7 +119,7 @@ class Game:
         click_font = pygame.font.SysFont("hack", 20)
         click_text = click_font.render(
             "Pressione uma tecla para jogar novamente.", 1, GameSettings.GREEN)
-        self.screen.fill(GameSettings.BACKGROUND)
+        self.set_screen()
 
         while True:
 
@@ -138,6 +139,7 @@ class Game:
             pygame.time.wait(1000)
 
             if self.get_random_key() is not None:
+                pygame.event.get()
                 return
 
             pygame.display.update()
