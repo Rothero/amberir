@@ -175,13 +175,6 @@ class Game:
 
             # Checks if the player ate the apple.
             if snake.ate_apple(apple):
-                apple = Apple()
-                apple.draw(self.screen)
-                snake.length += 1
-                self.score = str(snake.length - 2)
-                new_position = {"x": snake.coords[-1]["x"],
-                                "y": snake.coords[-1]["y"]}
-                snake.coords.append(new_position)
                 self.eaten_apples.append(apple.value)
                 if len(self.eaten_apples) == 2:
                     apple1 = Apple()
@@ -190,7 +183,19 @@ class Game:
                     apple1.draw(self.screen)
                     apple2.draw(self.screen)
                     apple3.draw(self.screen)
+                    print (apple1.value)
+                    print (apple2.value)
+                    print (apple3.value)
+                elif len(self.eaten_apples) == 3:
                     self.eaten_apples.clear()
+                    snake.length += 1
+                    self.score = str(snake.length - 2)
+                    new_position = {"x": snake.coords[-1]["x"],
+                                    "y": snake.coords[-1]["y"]}
+                    snake.coords.append(new_position)
+                else:
+                    apple = Apple()
+                    apple.draw(self.screen)
 
             # Checks if the snake hit itself.
             if snake.hit_itself() or snake.on_border():
