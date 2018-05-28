@@ -16,6 +16,10 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 """
 
+import time
+
+import sys
+
 import pygame
 
 from apple import Apple
@@ -66,7 +70,15 @@ class Game:
     def show_title(self):
         title_font = pygame.font.SysFont("hack", 100)
         title = title_font.render("Amberis", 1, GameSettings.WHITE)
-        self.centralized_text(title)
+
+        while True:
+            self.centralized_text(title)
+
+            if self.get_random_key() is not None:
+                pygame.event.get()
+                return
+
+            pygame.display.update()
 
     def draw_score(self, snake):
         score_text = pygame.font.SysFont("hack", 15)
@@ -74,22 +86,47 @@ class Game:
             "Score: " + str(snake.length - 2), 1, GameSettings.BLUE)
         self.screen.blit(score, (50, 50))
 
+    def get_random_key(self):
+        key_event = pygame.event.get(pygame.KEYUP)
+
+        if len(key_event) == 0:
+            return None
+
+        if key_event[0].key == pygame.K_ESCAPE:
+            pygame.quit()
+            sys.exit()
+
+        return key_event[0].key
+
+    def game_over_screen(self):
+        font = pygame.font.SysFont("hack", 50)
+        label = font.render("Você morreu", 1, GameSettings.BLUE)
+        self.screen.fill(GameSettings.BACKGROUND)
+
+        while True:
+            self.centralized_text(label)
+
+            if self.get_random_key() is not None:
+                pygame.event.get()
+                return
+
+            pygame.display.update()
+
     def run(self):
         pygame.init()
         snake = Snake()
         done = False
         clock = pygame.time.Clock()
-        font = pygame.font.SysFont("hack", 50)
         apple = Apple()
 
         self.set_caption()
         self.set_screen()
-        self.draw_background_chain()
 
-        while done is False:
+        self.show_title()
+
+        while not done:
             clock.tick(10)
 
-            # self.screen.fill((0, 0, 0))
             self.set_screen()
             self.draw_background_chain()
 
@@ -116,17 +153,13 @@ class Game:
 
             # Checks if the snake hit itself.
             if snake.hit_itself():
-                label = font.render("Você morreu", 1, GameSettings.BLUE)
-                self.centralized_text(label)
-                snake.alive = False
-                done = True
+                self.game_over_screen()
+                snake = Snake()
+                apple = Apple()
 
             if (snake.on_border()):
-                label = font.render("Você morreu", 1, GameSettings.BLUE)
-                self.centralized_text(label)
-                snake.alive = False
-                done = True
+                self.game_over_screen()
+                snake = Snake()
+                apple = Apple()
 
             pygame.display.update()
-
-        pygame.quit()
