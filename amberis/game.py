@@ -28,7 +28,7 @@ from settings import GameSettings
 class Game:
 
     def __init__(self):
-        self.score = 0
+        self.score = "0"
         self.screen = pygame.display.set_mode(GameSettings.SCREEN_SIZE)
 
     def set_caption(self):
@@ -74,6 +74,13 @@ class Game:
             "Pressione uma tecla para jogar.", 1, GameSettings.GREEN)
 
         while True:
+
+            # Closes the window if the user clicked to close.
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+
             self.centralized_text(title)
             self.screen.blit(click_text, (50, 50))
 
@@ -86,7 +93,7 @@ class Game:
     def draw_score(self, snake):
         score_text = pygame.font.SysFont("hack", 15)
         score = score_text.render(
-            "Score: " + str(snake.length - 2), 1, GameSettings.BLUE)
+            "Score: " + self.score, 1, GameSettings.BLUE)
         self.screen.blit(score, (50, 50))
 
     def get_random_key(self):
@@ -114,6 +121,13 @@ class Game:
         self.screen.fill(GameSettings.BACKGROUND)
 
         while True:
+
+            # Closes the window if the user clicked to close.
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+
             self.centralized_text(game_over_text)
             self.screen.blit(score_text, (
                 (GameSettings.SCREEN_SIZE[0] / 2) - (score_text_width / 2),
@@ -151,6 +165,8 @@ class Game:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     done = True
+                    pygame.quit()
+                    sys.exit()
 
             snake.draw(self.screen)
             snake.handle_keys()
@@ -174,10 +190,12 @@ class Game:
                 self.game_over_screen()
                 snake = Snake()
                 apple = Apple()
+                self.score = "0"
 
             if snake.on_border():
                 self.game_over_screen()
                 snake = Snake()
                 apple = Apple()
+                self.score = "0"
 
             pygame.display.update()
