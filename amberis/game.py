@@ -74,7 +74,6 @@ class Game:
             "Pressione uma tecla para jogar.", 1, GameSettings.GREEN)
 
         while True:
-
             # Closes the window if the user clicked to close.
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -85,7 +84,6 @@ class Game:
             self.screen.blit(click_text, (50, 50))
 
             if self.get_random_key() is not None:
-                pygame.event.get()
                 return
 
             pygame.display.update()
@@ -138,7 +136,6 @@ class Game:
             pygame.time.wait(1000)
 
             if self.get_random_key() is not None:
-                pygame.event.get()
                 return
 
             pygame.display.update()
