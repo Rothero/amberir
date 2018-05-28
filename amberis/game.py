@@ -30,7 +30,7 @@ class Game:
     def __init__(self):
         self.score = "0"
         self.screen = pygame.display.set_mode(GameSettings.SCREEN_SIZE)
-        self.eaten_apples =[]
+        self.eaten_apples = []
 
     def set_caption(self):
         pygame.display.set_caption("Snake matemático")
@@ -105,7 +105,8 @@ class Game:
             pygame.quit()
             sys.exit()
 
-        return key_event[0].key
+        if key_event[0].key == pygame.K_RETURN:
+            return key_event[0].key
 
     def game_over_screen(self):
         game_over_font = pygame.font.SysFont("hack", 50)
@@ -146,7 +147,11 @@ class Game:
         snake = Snake()
         done = False
         clock = pygame.time.Clock()
-        apple = Apple()
+        apple0 = Apple()
+        apple1 = Apple()
+        apple2 = Apple()
+        apple3 = Apple(sum(self.eaten_apples))
+        apples = [apple0, apple1, apple2, apple3]
 
         self.set_caption()
         self.set_screen()
@@ -171,37 +176,58 @@ class Game:
             snake.set_direction()
             self.draw_score(snake)
 
-            apple.draw(self.screen)
+            if len(self.eaten_apples) == 2:
+                for apple in apples[1:]:
+                    apple.draw(self.screen)
+            else:
+                apples[0].draw(self.screen)
 
             # Checks if the player ate the apple.
-            if snake.ate_apple(apple):
-                self.eaten_apples.append(apple.value)
-                if len(self.eaten_apples) == 2:
-                    apple1 = Apple()
-                    apple2 = Apple()
-                    apple3 = Apple(sum(self.eaten_apples))
-                    apple1.draw(self.screen)
-                    apple2.draw(self.screen)
-                    apple3.draw(self.screen)
-                    print (apple1.value)
-                    print (apple2.value)
-                    print (apple3.value)
-                elif len(self.eaten_apples) == 3:
-                    self.eaten_apples.clear()
-                    snake.length += 1
-                    self.score = str(snake.length - 2)
-                    new_position = {"x": snake.coords[-1]["x"],
-                                    "y": snake.coords[-1]["y"]}
-                    snake.coords.append(new_position)
-                else:
-                    apple = Apple()
-                    apple.draw(self.screen)
+            for apple in apples:
+                if snake.ate_apple(apple) and apple.drawn:
+                    self.eaten_apples.append(apple.value)
+                    print(apple.rect)
+                    if len(self.eaten_apples) == 2:
+                        apples[0] = Apple()
+                        apples[1] = Apple()
+                        apples[2] = Apple()
+                        apples[3] = Apple(sum(self.eaten_apples))
+
+                        apples[1].draw(self.screen)
+                        apples[2].draw(self.screen)
+                        apples[3].draw(self.screen)
+
+                    elif len(self.eaten_apples) == 3:
+                        if (apple.value ==
+                                self.eaten_apples[0] + self.eaten_apples[1]):
+                            self.eaten_apples.clear()
+                            snake.length += 1
+                            self.score = str(snake.length - 2)
+                            new_position = {"x": snake.coords[-1]["x"],
+                                            "y": snake.coords[-1]["y"]}
+                            snake.coords.append(new_position)
+                        else:
+                            self.eaten_apples.clear()
+                            self.game_over_screen()
+                            snake = Snake()
+                            apples[0] = Apple()
+                            apples[1] = Apple()
+                            apples[2] = Apple()
+                            apples[3] = Apple()
+                            self.score = "0"
+                    else:
+                        apples[0] = Apple()
+                        apples[0].draw(self.screen)
 
             # Checks if the snake hit itself.
             if snake.hit_itself() or snake.on_border():
+                self.eaten_apples.clear()
                 self.game_over_screen()
                 snake = Snake()
-                apple = Apple()
+                apples[0] = Apple()
+                apples[1] = Apple()
+                apples[2] = Apple()
+                apples[3] = Apple()
                 self.score = "0"
 
             pygame.display.update()

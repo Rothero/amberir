@@ -25,7 +25,7 @@ from settings import GameSettings
 
 class Apple:
 
-    def __init__(self,value=None):
+    def __init__(self, value=None):
         self.x = random.randint(
             0, GameSettings.CELL_WIDTH - 1) * GameSettings.CELL_SIZE
         self.y = random.randint(
@@ -38,6 +38,7 @@ class Apple:
             self.value = random.randint(0, 20)
         else:
             self.value = value
+        self.drawn = False
 
     def draw(self, screen):
         pygame.draw.rect(screen, GameSettings.RED, self.rect)
@@ -46,3 +47,4 @@ class Apple:
         value = str(self.value)
         text = font.render(value, 1, GameSettings.BACKGROUND)
         screen.blit(text, (self.x, self.y))
+        self.drawn = True
