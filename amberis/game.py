@@ -183,13 +183,7 @@ class Game:
                 snake.coords.append(new_position)
 
             # Checks if the snake hit itself.
-            if snake.hit_itself():
-                self.game_over_screen()
-                snake = Snake()
-                apple = Apple()
-                self.score = "0"
-
-            if snake.on_border():
+            if snake.hit_itself() or snake.on_border():
                 self.game_over_screen()
                 snake = Snake()
                 apple = Apple()
