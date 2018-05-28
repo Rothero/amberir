@@ -16,8 +16,6 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 """
 
-import time
-
 import sys
 
 import pygame
@@ -71,8 +69,13 @@ class Game:
         title_font = pygame.font.SysFont("hack", 100)
         title = title_font.render("Amberis", 1, GameSettings.WHITE)
 
+        click_font = pygame.font.SysFont("hack", 20)
+        click_text = click_font.render(
+            "Pressione uma tecla para jogar.", 1, GameSettings.GREEN)
+
         while True:
             self.centralized_text(title)
+            self.screen.blit(click_text, (50, 50))
 
             if self.get_random_key() is not None:
                 pygame.event.get()
@@ -99,12 +102,26 @@ class Game:
         return key_event[0].key
 
     def game_over_screen(self):
-        font = pygame.font.SysFont("hack", 50)
-        label = font.render("Você morreu", 1, GameSettings.BLUE)
+        game_over_font = pygame.font.SysFont("hack", 50)
+        game_over_text = game_over_font.render(
+            "Você morreu!", 1, GameSettings.BLUE)
+        score_text = game_over_font.render(
+            "Sua pontuação foi: " + self.score, 0, GameSettings.BLUE)
+        score_text_width = score_text.get_rect().width
+        click_font = pygame.font.SysFont("hack", 20)
+        click_text = click_font.render(
+            "Pressione uma tecla para jogar novamente.", 1, GameSettings.GREEN)
         self.screen.fill(GameSettings.BACKGROUND)
 
         while True:
-            self.centralized_text(label)
+            self.centralized_text(game_over_text)
+            self.screen.blit(score_text, (
+                (GameSettings.SCREEN_SIZE[0] / 2) - (score_text_width / 2),
+                150))
+
+            self.screen.blit(click_text, (50, 50))
+            pygame.display.update()
+            pygame.time.wait(1000)
 
             if self.get_random_key() is not None:
                 pygame.event.get()
@@ -147,6 +164,7 @@ class Game:
                 apple = Apple()
                 apple.draw(self.screen)
                 snake.length += 1
+                self.score = str(snake.length - 2)
                 new_position = {"x": snake.coords[-1]["x"],
                                 "y": snake.coords[-1]["y"]}
                 snake.coords.append(new_position)
@@ -157,7 +175,7 @@ class Game:
                 snake = Snake()
                 apple = Apple()
 
-            if (snake.on_border()):
+            if snake.on_border():
                 self.game_over_screen()
                 snake = Snake()
                 apple = Apple()
