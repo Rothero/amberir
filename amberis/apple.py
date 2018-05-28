@@ -25,7 +25,7 @@ from settings import GameSettings
 
 class Apple:
 
-    def __init__(self):
+    def __init__(self,value=None):
         self.x = random.randint(
             0, GameSettings.CELL_WIDTH - 1) * GameSettings.CELL_SIZE
         self.y = random.randint(
@@ -34,7 +34,10 @@ class Apple:
         self.rect = pygame.rect.Rect((self.x, self.y,
                                       GameSettings.CELL_SIZE,
                                       GameSettings.CELL_SIZE))
-        self.value = random.randint(0, 20)
+        if value is None:
+            self.value = random.randint(0, 20)
+        else:
+            self.value = value
 
     def draw(self, screen):
         pygame.draw.rect(screen, GameSettings.RED, self.rect)
