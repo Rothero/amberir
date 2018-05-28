@@ -36,7 +36,7 @@ class Game:
         pygame.display.set_caption("Snake matemático")
 
     def set_screen(self):
-        self.screen.fill(GameSettings.BACKGROUND)
+        self.screen.fill(GameSettings.LIGHT_GREEN)
 
     def draw_background_chain(self):
         for line in range(0,
@@ -44,7 +44,7 @@ class Game:
                           GameSettings.CELL_SIZE):
             pygame.draw.line(
                 self.screen,
-                GameSettings.GREEN, (line, 0),
+                GameSettings.LIGHT_BLUE, (line, 0),
                 (line, GameSettings.SCREEN_SIZE[1]))
 
         for column in range(0,
@@ -52,7 +52,7 @@ class Game:
                             GameSettings.CELL_SIZE):
             pygame.draw.line(
                 self.screen,
-                GameSettings.GREEN, (0, column),
+                GameSettings.LIGHT_BLUE, (0, column),
                 (GameSettings.SCREEN_SIZE[0], column))
 
     def centralized_text(self, text):
