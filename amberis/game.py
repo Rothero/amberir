@@ -1,6 +1,5 @@
 """
 Edison Neto, Roger Rojas, Kalvin Vasconcelos, Kaique Juvêncio
-This software simply converts a number in some numerical base to decimal
 
 Copyright (C) 2018 Edison Neto
 This program is free software; you can redistribute it and/or
@@ -17,6 +16,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 """
 
 import sys
+import random
 
 import pygame
 
@@ -72,7 +72,9 @@ class Game:
 
         click_font = pygame.font.SysFont("hack", 20)
         click_text = click_font.render(
-            "Pressione uma tecla para jogar.", 1, GameSettings.GREEN)
+            "Pressione uma tecla para jogar.", 1, GameSettings.RED)
+        tutorial_text = click_font.render(
+            "O jogo consiste em após comer dois números consectutivos, o terceiro deve ser a soma dos anteriores.", 1, GameSettings.WHITE)
 
         while True:
             # Closes the window if the user clicked to close.
@@ -82,6 +84,11 @@ class Game:
                     sys.exit()
 
             self.centralized_text(title)
+            tutorial_text_width = tutorial_text.get_rect().width
+            self.screen.blit(tutorial_text, (
+                GameSettings.SCREEN_WIDTH / 2 - tutorial_text_width / 2,
+                500
+            ))
             self.screen.blit(click_text, (50, 50))
 
             if self.get_random_key() is not None:
@@ -98,11 +105,11 @@ class Game:
 
     def get_random_key(self):
         key_event = pygame.key.get_pressed()
-        print(key_event)
 
         if key_event[pygame.K_ESCAPE]:
             pygame.quit()
             sys.exit()
+
         for i in key_event:
             if i != 0:
                 return key_event
@@ -118,7 +125,7 @@ class Game:
         score_text_width = score_text.get_rect().width
         click_font = pygame.font.SysFont("hack", 20)
         click_text = click_font.render(
-            "Pressione uma tecla para jogar novamente.", 1, GameSettings.GREEN)
+            "Pressione uma tecla para jogar novamente.", 1, GameSettings.RED)
         self.set_screen()
 
         while True:
@@ -139,7 +146,6 @@ class Game:
             pygame.time.wait(1000)
 
             if self.get_random_key() is not None:
-                pygame.event.get()
                 return
 
             pygame.display.update()
@@ -161,7 +167,7 @@ class Game:
         self.show_title()
 
         while not done:
-            clock.tick(10)
+            clock.tick(8)
 
             self.set_screen()
             self.draw_background_chain()
@@ -188,11 +194,14 @@ class Game:
             for apple in apples:
                 if snake.ate_apple(apple) and apple.drawn:
                     self.eaten_apples.append(apple.value)
-                    print(apple.rect)
                     if len(self.eaten_apples) == 2:
                         apples[0] = Apple()
-                        apples[1] = Apple()
-                        apples[2] = Apple()
+                        apples[1] = Apple(
+                            sum(self.eaten_apples) +
+                            random.randint(1, 5))
+                        apples[2] = Apple(
+                            sum(self.eaten_apples) +
+                            random.randint(1, 5))
                         apples[3] = Apple(sum(self.eaten_apples))
 
                         apples[1].draw(self.screen)
