@@ -1,6 +1,6 @@
 """
 Edison Neto, Roger Rojas, Kalvin Vasconcelos, Kaique Juvêncio
-This software simply converts a number in some numerical base to decimal
+It's a simple clone of the classic snake game.
 
 Copyright (C) 2018 Edison Neto
 This program is free software; you can redistribute it and/or

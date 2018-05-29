@@ -1,5 +1,6 @@
 """
 Edison Neto, Roger Rojas, Kalvin Vasconcelos, Kaique Juvêncio
+It's a simple clone of the classic snake game.
 
 Copyright (C) 2018 Edison Neto
 This program is free software; you can redistribute it and/or
