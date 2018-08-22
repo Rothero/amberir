@@ -27,6 +27,8 @@ from settings import GameSettings
 
 
 class Game:
+    """Base class to run the game.
+    """
 
     def __init__(self):
         self.score = "0"
@@ -34,12 +36,15 @@ class Game:
         self.eaten_apples = []
 
     def set_caption(self):
+        """Sets the caption. """
         pygame.display.set_caption("Snake matemático")
 
     def set_screen(self):
+        """Sets the screen to be filled with green. """
         self.screen.fill(GameSettings.LIGHT_GREEN)
 
     def draw_background_chain(self):
+        """Draws the background chain. """
         for line in range(0,
                           GameSettings.SCREEN_SIZE[0],
                           GameSettings.CELL_SIZE):
@@ -68,6 +73,7 @@ class Game:
             (GameSettings.SCREEN_SIZE[1] / 2) - 50))
 
     def show_title(self):
+        """Displays the title. """
         title_font = pygame.font.SysFont("hack", 100)
         title = title_font.render("Amberis", 1, GameSettings.WHITE)
 
@@ -75,7 +81,9 @@ class Game:
         click_text = click_font.render(
             "Pressione uma tecla para jogar.", 1, GameSettings.RED)
         tutorial_text = click_font.render(
-            "O jogo consiste em após comer dois números consectutivos, o terceiro deve ser a soma dos anteriores.", 1, GameSettings.WHITE)
+            '''O jogo consiste em após comer dois números consectutivos,
+            o terceiro deve ser a soma dos anteriores.''',
+            1, GameSettings.WHITE)
 
         while True:
             # Closes the window if the user clicked to close.
@@ -168,7 +176,7 @@ class Game:
         self.show_title()
 
         while not done:
-            clock.tick(8)
+            clock.tick(15)
 
             self.set_screen()
             self.draw_background_chain()
