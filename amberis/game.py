@@ -81,8 +81,10 @@ class Game:
         click_text = click_font.render(
             "Pressione uma tecla para jogar.", 1, GameSettings.RED)
         tutorial_text = click_font.render(
-            '''O jogo consiste em após comer dois números consectutivos,
-            o terceiro deve ser a soma dos anteriores.''',
+            '''
+            O jogo consiste em após comer dois números consectutivos,
+            o terceiro deve ser a soma dos anteriores.
+            ''',
             1, GameSettings.WHITE)
 
         while True:
